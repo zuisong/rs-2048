@@ -85,8 +85,8 @@ fn make_move(board: &mut [[u32; SIZE]; SIZE], direction: &Direction) -> bool {
             }
         }
         Direction::Down => {
-            for j in 0..SIZE {
-                for i in 1..(SIZE) {
+            for j in (0..SIZE).rev() {
+                for i in (1..SIZE).rev() {
                     if board[i][j] == board[i - 1][j] {
                         board[i][j] *= 2;
                         board[i - 1][j] = 0;
@@ -107,8 +107,8 @@ fn make_move(board: &mut [[u32; SIZE]; SIZE], direction: &Direction) -> bool {
             }
         }
         Direction::Right => {
-            for j in 1..SIZE {
-                for i in 0..(SIZE) {
+            for j in (1..SIZE).rev() {
+                for i in (0..SIZE).rev() {
                     if board[i][j] == board[i][j - 1] {
                         board[i][j] *= 2;
                         board[i][j - 1] = 0;
