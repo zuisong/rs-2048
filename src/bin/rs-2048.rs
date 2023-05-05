@@ -1,6 +1,9 @@
+use crossterm::event::{read, Event, KeyCode, KeyEvent};
+use crossterm::terminal::{disable_raw_mode, enable_raw_mode};
+
 use rand::Rng;
 use std::io;
-use std::io::Write;
+use std::io::{stdout, Write};
 
 const SIZE: usize = 4;
 
@@ -17,7 +20,12 @@ fn main() {
         if is_game_over(&board) {
             println!("Game over!");
         }
-        let direction = get_direction();
+        let direction = match get_direction() {
+            Some(d) => d,
+            None => {
+                return;
+            }
+        };
         if !make_move(&mut board, &direction) {
             println!("Invalid move!");
         } else {
@@ -53,20 +61,28 @@ fn is_game_over(board: &[[u32; SIZE]; SIZE]) -> bool {
     true
 }
 
-fn get_direction() -> Direction {
+fn get_direction() -> Option<Direction> {
+    let mut stdout = stdout();
+    // 启用原始模式
+    enable_raw_mode().unwrap();
     loop {
-        print!("Enter direction (w:up/s:down/a:left/d:right): ");
-
-        io::stdout().flush().unwrap();
-        let mut input = String::new();
-        io::stdin().read_line(&mut input).unwrap();
-        match input.trim().to_lowercase().as_str() {
-            "w" => return Direction::Up,
-            "s" => return Direction::Down,
-            "a" => return Direction::Left,
-            "d" => return Direction::Right,
-            _ => println!("Invalid direction!"),
+        if let Ok(Event::Key(KeyEvent { code, .. })) = read() {
+            let d = match code {
+                KeyCode::Up => Direction::Up,
+                KeyCode::Down => Direction::Down,
+                KeyCode::Left => Direction::Left,
+                KeyCode::Right => Direction::Right,
+                _ => {
+                    break None;
+                }
+            };
+            disable_raw_mode().unwrap();
+            println!("{:?}", d);
+            return Some(d);
         }
+
+        // 在循环中手动刷新输出，以便在处理事件后立即更新终端界面
+        stdout.flush().unwrap();
     }
 }
 
@@ -182,6 +198,7 @@ fn shift_tiles(board: &mut [[u32; SIZE]; SIZE], direction: &Direction) -> bool {
     return moved;
 }
 
+#[derive(Debug)]
 enum Direction {
     Up,
     Down,
