@@ -4,6 +4,7 @@ const SIZE: usize = 4;
 
 pub struct Game2048 {
     pub board: [[usize; SIZE]; SIZE],
+    score: usize,
     rng: ThreadRng,
 }
 
@@ -13,6 +14,7 @@ impl Default for Game2048 {
         let mut game = Self {
             board,
             rng: rand::thread_rng(),
+            score: 0,
         };
         game.add_random_tile();
         game.add_random_tile();
@@ -21,6 +23,10 @@ impl Default for Game2048 {
 }
 
 impl Game2048 {
+    pub fn get_score(&self) -> usize {
+        return self.score;
+    }
+
     fn add_random_tile(&mut self) {
         let rng = &mut self.rng;
 
@@ -127,6 +133,7 @@ impl Game2048 {
                 for j in 0..SIZE {
                     for i in 1..(SIZE) {
                         if board[i][j] == board[i - 1][j] {
+                            self.score += board[i][j];
                             board[i - 1][j] *= 2;
                             board[i][j] = 0;
                             moved = true;
@@ -138,6 +145,7 @@ impl Game2048 {
                 for j in (0..SIZE).rev() {
                     for i in (1..SIZE).rev() {
                         if board[i][j] == board[i - 1][j] {
+                            self.score += board[i][j];
                             board[i][j] *= 2;
                             board[i - 1][j] = 0;
                             moved = true;
@@ -149,6 +157,7 @@ impl Game2048 {
                 for j in 1..SIZE {
                     for i in 0..(SIZE) {
                         if board[i][j] == board[i][j - 1] {
+                            self.score += board[i][j];
                             board[i][j - 1] *= 2;
                             board[i][j] = 0;
                             moved = true;
@@ -160,6 +169,7 @@ impl Game2048 {
                 for j in (1..SIZE).rev() {
                     for i in (0..SIZE).rev() {
                         if board[i][j] == board[i][j - 1] {
+                            self.score += board[i][j];
                             board[i][j] *= 2;
                             board[i][j - 1] = 0;
                             moved = true;
@@ -179,7 +189,7 @@ impl Game2048 {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone, Copy)]
 pub enum Direction {
     Up,
     Down,

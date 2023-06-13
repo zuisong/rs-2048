@@ -7,4 +7,5 @@ edition = "2021"
 
 [dependencies]
 crossterm = {version = "0.26.1"}
+fltk = "1.4.5"
 rand = "0.8.5"
