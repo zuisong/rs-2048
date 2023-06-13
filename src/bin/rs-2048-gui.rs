@@ -5,20 +5,22 @@ use fltk::{
     prelude::*,
     window::*,
 };
+
 use rs_2048::{Direction, Game2048};
+
+const SCORE_FRAME_WIDTH: i32 = 50;
+const _PADDING: i32 = 10;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = app::App::default();
-    let mut wind = Window::new(100, 100, 380, 410, "2048");
+    let mut wind = Window::new(100, 100, 370, 410, "2048");
 
-    let mut score_frame = Frame::new(0, 0, 400, 50, "0");
+    let mut score_frame = Frame::new(0, 0, wind.width(), SCORE_FRAME_WIDTH, "Score: 0");
     score_frame.set_label_size(30);
     wind.add(&score_frame);
 
-    // 设置窗口背景色和按钮颜色
     wind.set_color(Color::White);
     let mut game = Game2048::default();
-    // 绘制游戏界面
     draw_board(&mut wind, &game);
     wind.end();
     wind.show();
@@ -32,21 +34,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 Key::Down => s.send(Direction::Down),
                 Key::Left => s.send(Direction::Left),
                 Key::Right => s.send(Direction::Right),
-                _ => {
-                    return false;
-                }
+                _ => return false,
             },
-            _ => {
-                return false;
-            }
+            _ => return false,
         };
-        return true;
+        true
     });
 
     while app.wait() {
-        let p = r.recv();
-        if let Some(msg) = p {
-            dbg!(&msg);
+        if let Some(msg) = r.recv() {
             let moved = game.make_move(&msg);
             if moved {
                 wind.redraw();
@@ -54,39 +50,40 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             }
 
             if game.is_game_over() {
-                dbg!("Game Over !");
-                score_frame.set_label(format!("Game Over ! Score: {}", game.get_score()).as_str())
+                score_frame.set_label(format!("Game Over! Score: {}", game.get_score()).as_str());
             } else {
-                score_frame.set_label(game.get_score().to_string().as_str())
+                score_frame.set_label(format!("Score: {}", game.get_score()).to_string().as_str());
             }
         }
     }
     Ok(())
 }
 
-// 绘制游戏界面
 fn draw_board(wind: &mut Window, game: &Game2048) {
-    let mut x = 10;
-    let mut y = 50;
     let cell_size = 80;
-
+    
+    let mut x: i32 = _PADDING;
+    let mut y = SCORE_FRAME_WIDTH;
+    let cell_size_plus_spacing = cell_size + _PADDING;
     for i in 0..4 {
         for j in 0..4 {
             let value = game.board[i][j];
             let value_str = value.to_string();
+            let color = cell_color(value);
             let mut frame = Frame::new(x, y, cell_size, cell_size, "");
             frame.set_label_size(30);
             frame.set_frame(FrameType::FlatBox);
-            frame.set_color(cell_color(value));
+            frame.set_color(color);
             frame.set_label(match value {
                 0 => "",
                 _ => value_str.as_str(),
             });
+
             wind.add(&frame);
-            x += cell_size + 10;
+            x += cell_size_plus_spacing;
         }
-        x = 10;
-        y += cell_size + 10;
+        x = _PADDING;
+        y += cell_size_plus_spacing;
     }
 }
 
