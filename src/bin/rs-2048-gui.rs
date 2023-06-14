@@ -61,7 +61,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 fn draw_board(wind: &mut Window, game: &Game2048) {
     let cell_size = 80;
-    
+
     let mut x: i32 = _PADDING;
     let mut y = SCORE_FRAME_WIDTH;
     let cell_size_plus_spacing = cell_size + _PADDING;
