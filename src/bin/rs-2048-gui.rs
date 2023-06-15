@@ -67,7 +67,7 @@ fn draw_board(wind: &mut Window, game: &Game2048) {
     let cell_size_plus_spacing = cell_size + _PADDING;
     for i in 0..4 {
         for j in 0..4 {
-            let value = game.board[i][j];
+            let value = game.get_board()[i][j];
             let value_str = value.to_string();
             let color = cell_color(value);
             let mut frame = Frame::new(x, y, cell_size, cell_size, "");

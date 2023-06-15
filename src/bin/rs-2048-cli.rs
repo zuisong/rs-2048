@@ -52,7 +52,7 @@ fn get_direction() -> Option<Direction> {
 pub fn print_board(game: &Game2048) {
     let cell_width = 7;
 
-    let board = &game.board;
+    let board = &game.get_board();
 
     execute!(std::io::stdout(), Clear(ClearType::All)).unwrap();
 
