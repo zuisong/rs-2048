@@ -1,3 +1,5 @@
+#![windows_subsystem = "windows"]
+
 use fltk::{
     app,
     enums::{Color, Event, FrameType, Key},

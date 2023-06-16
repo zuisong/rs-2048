@@ -1,4 +1,4 @@
-use rand::{rngs::ThreadRng, Rng};
+use tinyrand::{Probability, Rand, RandRange, StdRand};
 
 // 定义常量SIZE为4
 const SIZE: usize = 4;
@@ -7,7 +7,7 @@ const SIZE: usize = 4;
 pub struct Game2048 {
     board: [[usize; SIZE]; SIZE],
     score: usize,
-    rng: ThreadRng,
+    rng: StdRand,
 }
 
 // Game2048的默认实现，初始化board全为0，随机生成两个初始数字，并返回游戏对象
@@ -16,7 +16,7 @@ impl Default for Game2048 {
         let board = [[0; 4]; 4];
         let mut game = Self {
             board,
-            rng: rand::thread_rng(),
+            rng: StdRand::default(),
             score: 0,
         };
         game.add_random_tile();
@@ -53,8 +53,12 @@ impl Game2048 {
         if empty_tiles.is_empty() {
             return;
         }
-        let (i, j) = empty_tiles[rng.gen_range(0..empty_tiles.len())];
-        board[i][j] = if rng.gen_bool(0.9) { 2 } else { 4 };
+        let (i, j) = empty_tiles[rng.next_range(0..empty_tiles.len())];
+        board[i][j] = if rng.next_bool(Probability::new(0.9)) {
+            2
+        } else {
+            4
+        };
     }
 
     // 判断游戏是否结束
