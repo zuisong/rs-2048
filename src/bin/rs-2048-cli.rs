@@ -1,3 +1,4 @@
+#![feature(slice_flatten)]
 use crossterm::{
     event::{read, Event, KeyCode, KeyEvent},
     execute, queue,
@@ -13,6 +14,7 @@ fn main() {
     loop {
         println!();
         print_board(&game);
+        println!("{}", code);
         if game.is_game_over() {
             println!("Game over! Score: {}", game.get_score());
         } else {
@@ -28,25 +30,40 @@ fn main() {
     }
 }
 
-fn get_direction() -> Option<Direction> {
-    let mut stdout = std::io::stdout();
-    enable_raw_mode().unwrap();
-    loop {
-        if let Ok(Event::Key(KeyEvent { code, .. })) = read() {
-            let d = match code {
-                KeyCode::Up => Direction::Up,
-                KeyCode::Down => Direction::Down,
-                KeyCode::Left => Direction::Left,
-                KeyCode::Right => Direction::Right,
-                _ => break None,
-            };
-            disable_raw_mode().unwrap();
-            println!("{:?}", d);
-            return Some(d);
-        }
 
-        stdout.flush().unwrap();
+
+fn estimate(grid: &[[usize; 4]; 4]) -> i32 {
+    let grid: Vec<i32> = grid.flatten().iter().map(|it| *it as i32).collect();
+
+    let mut sum = 0;
+    let mut penalty = 0;
+
+    for i in 0..16 {
+        sum += grid[i];
+        if i % 4 != 3 {
+            penalty += (grid[i] - grid[i + 1]).abs();
+        }
+        if i < 12 {
+            penalty += (grid[i] - grid[i + 4]).abs();
+        }
     }
+
+    return (sum * 4 - penalty) * 2;
+}
+
+fn get_direction(game: &Game2048) -> Option<Direction> {
+
+
+let mut d = Direction::Left;
+
+for d1 in vec![ Direction::Left, Direction::Right , Direction::Right, Direction::Left]  {
+    
+}
+
+
+
+    let mut stdout = std::io::stdout();
+    stdout.flush().unwrap();
 }
 
 pub fn print_board(game: &Game2048) {
