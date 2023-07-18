@@ -7,9 +7,23 @@ version = "0.2.0"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-crossterm = {version = "0.26.1"}
-fltk = "1.4.6"
-tinyrand = "0.5.0"
+crossterm = {version = "0.26.1", optional = true}
+fastrand = "2.0.0"
+fltk = {version = "1.4.7", optional = true}
+[[bin]]
+name = "rs-2048-cli"
+path = "src/bin/rs-2048-cli.rs"
+required-features = ["cli"]
+
+[[bin]]
+name = "rs-2048-gui"
+path = "src/bin/rs-2048-gui.rs"
+required-features = ["gui"]
+
+[features]
+cli = ["dep:crossterm"]
+gui = ["dep:fltk"]
+default = ["gui"]
 
 # https://github.com/johnthagen/min-sized-rust
 [profile.release]

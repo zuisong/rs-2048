@@ -8,10 +8,8 @@ use rs_2048::{Direction, Game2048};
 use std::io::Write;
 
 fn main() {
-    std::io::stdout().flush().unwrap();
     let mut game = Game2048::default();
     loop {
-        println!();
         print_board(&game);
         if game.is_game_over() {
             println!("Game over! Score: {}", game.get_score());
