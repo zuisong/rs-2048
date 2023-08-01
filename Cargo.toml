@@ -9,7 +9,7 @@ version = "0.2.0"
 [dependencies]
 crossterm = {version = "0.26.1", optional = true}
 fastrand = "2.0.0"
-fltk = {version = "1.4.7", optional = true}
+fltk = {version = "1.4.9", optional = true}
 [[bin]]
 name = "rs-2048-cli"
 path = "src/bin/rs-2048-cli.rs"
