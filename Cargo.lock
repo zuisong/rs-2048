@@ -93,9 +93,9 @@ checksum = "25cbce373ec4653f1a01a31e8a5e5ec0c622dc27ff9c4e6606eefef5cbbed4a5"
 
 [[package]]
 name = "fltk"
-version = "1.4.13"
+version = "1.4.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "5bf66f25cd4ebfcbe87fcac1f2f00fa782dc2466246d9e3e1d3c58974182816c"
+checksum = "8d30baff5a3d1b10c0c7e8f25327dbe5fc8a8b5a846908bc9ee83bed0118a160"
 dependencies = [
  "bitflags 2.3.3",
  "crossbeam-channel",
@@ -106,9 +106,9 @@ dependencies = [
 
 [[package]]
 name = "fltk-sys"
-version = "1.4.13"
+version = "1.4.15"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "367668668c3fc86f1320657a1f7ab28bb7a9a310e7516ace118978747d3c5af3"
+checksum = "b911916ee205391540210439f9336bfa1349114896dae29d01c8dfe1cb562150"
 dependencies = [
  "cmake",
 ]
@@ -238,9 +238,9 @@ checksum = "62bb4feee49fdd9f707ef802e22365a35de4b7b299de4763d44bfea899442ff9"
 
 [[package]]
 name = "ttf-parser"
-version = "0.19.1"
+version = "0.20.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a464a4b34948a5f67fddd2b823c62d9d92e44be75058b99939eae6c5b6960b33"
+checksum = "17f77d76d837a7830fe1d4f12b7b4ba4192c1888001c7164257e4bc6d21d96b4"
 
 [[package]]
 name = "wasi"
