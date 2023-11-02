@@ -48,7 +48,7 @@ fn get_direction() -> Option<Direction> {
 }
 
 pub fn print_board(game: &Game2048) {
-    let cell_width = 7;
+    let cell_width = 5;
 
     let board = &game.get_board();
 
