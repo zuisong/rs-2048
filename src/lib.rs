@@ -141,7 +141,7 @@ impl Game2048 {
 }
 
 // 移动方向的枚举类型
-#[derive(Debug, Clone, Copy)]
+#[derive(Debug)]
 pub enum Direction {
     Up,
     Down,
@@ -151,13 +151,41 @@ pub enum Direction {
 
 #[cfg(test)]
 mod tests {
-    use crate::Game2048;
+    use crate::{Direction, Game2048};
 
     #[test]
     fn test_game() {
-        let mut init = Game2048::default();
-        assert_eq!(init.get_score(), 0);
-        assert_eq!(init.is_game_over(), false);
-        init.make_move(&crate::Direction::Left);
+        let mut game = Game2048::default();
+        assert_eq!(game.get_score(), 0);
+        assert!(!game.is_game_over());
+        game.make_move(&crate::Direction::Left);
+    }
+
+    #[test]
+    fn test_game2() {
+        let board = [[2; 4]; 4];
+        let mut game = Game2048 { board, score: 0 };
+        assert!(!game.is_game_over());
+        assert_eq!(game.get_board(), &[[2; 4]; 4]);
+
+        game.make_move(&crate::Direction::Up);
+        game.make_move(&crate::Direction::Left);
+        game.make_move(&crate::Direction::Down);
+        game.make_move(&crate::Direction::Right);
+    }
+
+    #[test]
+    fn test_game_over() {
+        let board = [[2, 4, 2, 4], [4, 2, 4, 2], [2, 4, 2, 4], [4, 2, 4, 2]];
+        let mut game = Game2048 { board, score: 0 };
+
+        assert!(game.is_game_over());
+
+        game.add_random_tile();
+
+        assert_eq!(format!("{:?}", Direction::Up), "Up");
+        assert_eq!(format!("{:?}", Direction::Down), "Down");
+        assert_eq!(format!("{:?}", Direction::Left), "Left");
+        assert_eq!(format!("{:?}", Direction::Right), "Right");
     }
 }
