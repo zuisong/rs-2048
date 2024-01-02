@@ -148,3 +148,16 @@ pub enum Direction {
     Left,
     Right,
 }
+
+#[cfg(test)]
+mod tests {
+    use crate::Game2048;
+
+    #[test]
+    fn test_game() {
+        let mut init = Game2048::default();
+        assert_eq!(init.get_score(), 0);
+        assert_eq!(init.is_game_over(), false);
+        init.make_move(&crate::Direction::Left);
+    }
+}
