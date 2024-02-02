@@ -176,7 +176,13 @@ mod tests {
 
     #[test]
     fn test_game_over() {
-        let board = [[2, 4, 2, 4], [4, 2, 4, 2], [2, 4, 2, 4], [4, 2, 4, 2]];
+        let board = [
+            //
+            [2, 4, 2, 4],
+            [4, 2, 4, 2],
+            [2, 4, 2, 4],
+            [4, 2, 4, 2],
+        ];
         let mut game = Game2048 { board, score: 0 };
 
         assert!(game.is_game_over());
