@@ -10,7 +10,7 @@ default-run = "rs-2048-gui"
 
 [dependencies]
 console = { version = "0.15.8" , optional = true }
-fastrand = "2.1.0"
+fastrand = "2.1.1"
 fltk = { version = "1.4.33", optional = true, features = ["fltk-bundled"] }
 [[bin]]
 name = "rs-2048-cli"
