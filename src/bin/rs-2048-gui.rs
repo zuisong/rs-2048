@@ -30,14 +30,14 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
     let (s, r) = app::channel::<Direction>();
 
     wind.handle(move |_, ev| {
-        match ev {
-            Event::KeyDown => match app::event_key() {
-                Key::Up => s.send(Direction::Up),
-                Key::Down => s.send(Direction::Down),
-                Key::Left => s.send(Direction::Left),
-                Key::Right => s.send(Direction::Right),
-                _ => return false,
-            },
+        if Event::KeyDown != ev {
+            return false;
+        };
+        match app::event_key() {
+            Key::Up => s.send(Direction::Up),
+            Key::Down => s.send(Direction::Down),
+            Key::Left => s.send(Direction::Left),
+            Key::Right => s.send(Direction::Right),
             _ => return false,
         };
         true
