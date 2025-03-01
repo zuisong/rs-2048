@@ -7,7 +7,7 @@ default-run = "rs-2048-gui"
 rust-version = "1.81"
 
 [dependencies]
-console = { version = "0.15.10" , optional = true }
+console = { version = "0.15.11" , optional = true }
 fastrand = "2.3.0"
 fltk = { version = "1.5", optional = true, features = ["fltk-bundled"] }
 [[bin]]
