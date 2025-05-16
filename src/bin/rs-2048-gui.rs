@@ -8,14 +8,21 @@ use fltk::{
     window::*,
 };
 
-use rs_2048::{Direction, Game2048};
+use rs_2048::{Direction, Game2048, SIZE};
 
+const CELL_SIZE: i32 = 80;
 const SCORE_FRAME_WIDTH: i32 = 50;
 const _PADDING: i32 = 10;
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     let app = app::App::default();
-    let mut wind = Window::new(100, 100, 370, 410, "2048");
+    let mut wind = Window::new(
+        100,
+        100,
+        (SIZE as i32) * CELL_SIZE + ((SIZE + 1) as i32) * _PADDING,
+        ((SIZE as i32) * CELL_SIZE + ((SIZE + 1) as i32) * _PADDING) + SCORE_FRAME_WIDTH,
+        "2048",
+    );
 
     let mut score_frame = Frame::new(0, 0, wind.width(), SCORE_FRAME_WIDTH, "Score: 0");
     score_frame.set_label_size(30);
@@ -62,17 +69,15 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
 }
 
 fn draw_board(wind: &mut Window, game: &Game2048) {
-    let cell_size = 80;
-
     let mut x: i32 = _PADDING;
-    let mut y = SCORE_FRAME_WIDTH;
-    let cell_size_plus_spacing = cell_size + _PADDING;
-    for i in 0..4 {
-        for j in 0..4 {
+    let mut y = SCORE_FRAME_WIDTH + _PADDING;
+    let cell_size_plus_spacing = CELL_SIZE + _PADDING;
+    for i in 0..(rs_2048::SIZE) {
+        for j in 0..(rs_2048::SIZE) {
             let value = game.get_board()[i][j];
             let value_str = value.to_string();
             let color = cell_color(value);
-            let mut frame = Frame::new(x, y, cell_size, cell_size, "");
+            let mut frame = Frame::new(x, y, CELL_SIZE, CELL_SIZE, "");
             frame.set_label_size(30);
             frame.set_frame(FrameType::FlatBox);
             frame.set_color(color);

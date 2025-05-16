@@ -44,8 +44,8 @@ pub fn print_board(game: &Game2048) {
 
     let board = &game.get_board();
 
-    for y in 0..4 {
-        for x in 0..4 {
+    for y in 0..rs_2048::SIZE {
+        for x in 0..rs_2048::SIZE {
             let value = board[y][x];
             let out = if value > 0 {
                 value.to_string()
@@ -53,17 +53,17 @@ pub fn print_board(game: &Game2048) {
                 Default::default()
             };
             print!("{:^width$}", out, width = cell_width,);
-            if x < 3 {
+            if x < (rs_2048::SIZE - 1) {
                 print!("│");
             }
         }
 
         println!();
 
-        if y < 3 {
+        if y < (rs_2048::SIZE - 1) {
             println!(
                 "{}",
-                format!("{:─^width$}+", "", width = cell_width).repeat(4),
+                format!("{:─^width$}+", "", width = cell_width).repeat(rs_2048::SIZE),
             );
         }
     }

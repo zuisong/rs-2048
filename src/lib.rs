@@ -1,5 +1,5 @@
 // 定义常量SIZE为4
-const SIZE: usize = 4;
+pub const SIZE: usize = 4;
 
 // 定义结构体Game2048，包含一个4x4的二维数组board、分数score和随机数生成器rng
 pub struct Game2048 {
@@ -10,7 +10,7 @@ pub struct Game2048 {
 // Game2048的默认实现，初始化board全为0，随机生成两个初始数字，并返回游戏对象
 impl Default for Game2048 {
     fn default() -> Self {
-        let board = [[0; 4]; 4];
+        let board = [[0; SIZE]; SIZE];
         let mut game = Self { board, score: 0 };
         game.add_random_tile();
         game.add_random_tile();
@@ -101,8 +101,7 @@ impl Game2048 {
         moved
     }
 
-    // 进行消除操作, 并返回是否有数字块移动
-    pub fn make_move(&mut self, direction: &Direction) -> bool {
+    fn move1(&mut self, direction: &Direction) -> bool {
         let mut moved = self.shift_tiles(direction);
         let board = &mut self.board;
 
@@ -132,6 +131,12 @@ impl Game2048 {
 
         self.shift_tiles(direction);
 
+        moved
+    }
+
+    // 进行消除操作, 并返回是否有数字块移动
+    pub fn make_move(&mut self, direction: &Direction) -> bool {
+        let moved = self.move1(direction);
         if moved {
             self.add_random_tile();
         }
@@ -193,5 +198,108 @@ mod tests {
         assert_eq!(format!("{:?}", Direction::Down), "Down");
         assert_eq!(format!("{:?}", Direction::Left), "Left");
         assert_eq!(format!("{:?}", Direction::Right), "Right");
+    }
+
+    #[test]
+    fn test_down() {
+        let board = [
+            //
+            [2, 0, 0, 0],
+            [2, 0, 0, 0],
+            [4, 0, 0, 0],
+            [8, 0, 0, 0],
+        ];
+        let mut game = Game2048 { board, score: 0 };
+
+        assert!(!game.is_game_over());
+
+        game.move1(&crate::Direction::Down);
+        assert_eq!(
+            game.get_board(),
+            &[
+                //
+                [0, 0, 0, 0],
+                [4, 0, 0, 0],
+                [4, 0, 0, 0],
+                [8, 0, 0, 0],
+            ]
+        );
+    }
+
+    #[test]
+    fn test_right() {
+        let board = [
+            //
+            [2, 0, 0, 0],
+            [2, 0, 0, 0],
+            [4, 0, 0, 0],
+            [2, 2, 4, 8],
+        ];
+        let mut game = Game2048 { board, score: 0 };
+
+        assert!(!game.is_game_over());
+
+        game.move1(&crate::Direction::Right);
+        assert_eq!(
+            game.get_board(),
+            &[
+                //
+                [0, 0, 0, 2],
+                [0, 0, 0, 2],
+                [0, 0, 0, 4],
+                [0, 4, 4, 8],
+            ]
+        );
+    }
+    #[test]
+    fn test_left() {
+        let board = [
+            //
+            [2, 0, 0, 0],
+            [2, 0, 0, 0],
+            [4, 0, 0, 0],
+            [2, 2, 4, 8],
+        ];
+        let mut game = Game2048 { board, score: 0 };
+
+        assert!(!game.is_game_over());
+
+        game.move1(&crate::Direction::Left);
+        assert_eq!(
+            game.get_board(),
+            &[
+                //
+                [2, 0, 0, 0],
+                [2, 0, 0, 0],
+                [4, 0, 0, 0],
+                [4, 4, 8, 0],
+            ]
+        );
+    }
+
+    #[test]
+    fn test_up() {
+        let board = [
+            //
+            [2, 0, 0, 0],
+            [2, 0, 0, 0],
+            [4, 0, 0, 0],
+            [2, 2, 4, 8],
+        ];
+        let mut game = Game2048 { board, score: 0 };
+
+        assert!(!game.is_game_over());
+
+        game.move1(&crate::Direction::Up);
+        assert_eq!(
+            game.get_board(),
+            &[
+                //
+                [4, 2, 4, 8],
+                [4, 0, 0, 0],
+                [2, 0, 0, 0],
+                [0, 0, 0, 0],
+            ]
+        );
     }
 }
